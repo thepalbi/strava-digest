@@ -1,0 +1,22 @@
+{
+  "name": "running_weekly",
+  "version": "1.0.0",
+  "description": "Weekly email with your strava activities",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "strava-v3": "^2.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "strava",
+    "email",
+    "digest",
+    "newsletter"
+  ],
+  "author": "thapalbi",
+  "license": "ISC"
+}
