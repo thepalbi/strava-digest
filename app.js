@@ -54,8 +54,9 @@ app.get("/distances", (req, res) => {
     fetch(`http://${hostname}:${port}/activities`)
         .then(res2 => res2.json())
         .then(activities => {
-            var distances = _.map(activities, activity => activity.distance);
-            var summedDistances = _.sum(distances);
+            var summedDistances = _(activities)
+                .map(activity => activity.distance)
+                .sum();
             res.send({"summed_distances": summedDistances});
         });
 });
