@@ -63,6 +63,12 @@ app.get("/distances", (req, res) => {
 
 app.listen(port, hostname, () => console.log(`Serving at http://${hostname}:${port}/`));
 
+// TODO: Create mail sending service. (https://stackabuse.com/how-to-send-emails-with-node-js/)
+// TODO: Add global error handling across express.
+// TODO: Think of an email template to see the content.
+// TODO: Automate or improve OAuth authentication flow.
+// TODO: Move OAuth flow into a service-alike thingy.
+
 
 
 
