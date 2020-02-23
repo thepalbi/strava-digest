@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require('http');
 const https = require('https');
+const fetch = require('node-fetch');
 
 const app = express();
 const hostname = '127.0.0.1';
@@ -8,6 +9,7 @@ const port = 3000;
 
 const app_permissions = "activity:read_all";
 const client_id = 43985;
+const client_secret = "2041c4b02850ecee8724b430e640de138eb42379";
 
 const env = {};
 
@@ -23,19 +25,28 @@ app.get("/permission_granted", (req,res) => {
 });
 
 // TODO: Missing refresh OAuth token. Read about why it's needed.
+app.get("/refresh_token", (req,res) => {
+    fetch("https://www.strava.com/oauth/token?" +
+        `client_id=${client_id}&` +
+        `client_secret=${client_secret}&` +
+        `code=${env["me"]}&` +
+        `grant=authorization_code`, {method: 'POST'})
+        .then(res => res.json())
+        .then(json => 
+            {
+                var accessToken = json.access_token;
+                env["me_at"] = accessToken;
+                res.end("ok!")
+            })
+});
 
 app.get("/activities", (req, res) => {
-    https.get("https://www.strava.com/api/v3/activities", {
-        headers: {
-            Authorization: `Bearer ${env["me"]}`
-        }
-    }, (res) => {
-        console.log(`Request working in background ${req}`);
-        res.on("data", (chunk) => {
-            console.log(`Incoming chunk of data: ${chunk}`);
+    fetch('https://www.strava.com/api/v3/activities',
+        {
+            headers: { Authorization: `Bearer ${env["me_at"]}`}
         })
-    });
-    res.end("Working on bg")
+        .then(res2 => res2.json())
+        .then(json => res.send(json));
 });
 
 app.listen(port, hostname, () => console.log(`Serving at http://${hostname}:${port}/`));
