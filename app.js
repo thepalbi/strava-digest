@@ -2,6 +2,7 @@ const express = require("express");
 const http = require('http');
 const https = require('https');
 const fetch = require('node-fetch');
+const _ = require('lodash');
 
 const app = express();
 const hostname = '127.0.0.1';
@@ -47,6 +48,16 @@ app.get("/activities", (req, res) => {
         })
         .then(res2 => res2.json())
         .then(json => res.send(json));
+});
+
+app.get("/distances", (req, res) => {
+    fetch(`http://${hostname}:${port}/activities`)
+        .then(res2 => res2.json())
+        .then(activities => {
+            var distances = _.map(activities, activity => activity.distance);
+            var summedDistances = _.sum(distances);
+            res.send({"summed_distances": summedDistances});
+        });
 });
 
 app.listen(port, hostname, () => console.log(`Serving at http://${hostname}:${port}/`));
